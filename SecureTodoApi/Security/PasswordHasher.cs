@@ -32,7 +32,7 @@ namespace SecureTodoApi.Security
                 iterationCount: 10000,
                 numBytesRequested: 256 / 8));
 
-            return parts[1] == hash;
+            return hash == parts[1];
         }
     }
 }
