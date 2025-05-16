@@ -19,15 +19,21 @@ namespace SecureTodoApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetTodos()
+        public IActionResult GetTodos([FromQuery] string? category)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userIdClaim)) return Unauthorized();
+             if (string.IsNullOrEmpty(userIdClaim)) return Unauthorized();
 
-            var userId = int.Parse(userIdClaim);
-            var todos = _todoService.GetTodosByUserId(userId);
-            return Ok(todos);
+        var userId = int.Parse(userIdClaim);
+
+
+        var todos = string.IsNullOrEmpty(category)
+        ? _todoService.GetTodosByUserId(userId)
+        : _todoService.GetTodosByCategory(userId, category);
+
+         return Ok(todos);
         }
+
 
         [HttpPost]
         public IActionResult CreateTodo([FromBody] TodoCreateRequest request)

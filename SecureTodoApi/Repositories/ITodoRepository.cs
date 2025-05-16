@@ -9,5 +9,7 @@ namespace SecureTodoApi.Repositories
         void Create(TodoItem item);
         void Update(TodoItem item);
         void Delete(TodoItem item);
+        List<TodoItem> GetByCategory(int userId, string category);
+
     }
 }

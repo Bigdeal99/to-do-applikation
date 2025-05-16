@@ -18,6 +18,13 @@ namespace SecureTodoApi.Repositories
                 .Where(t => t.UserId == userId)
                 .ToList();
         }
+    public List<TodoItem> GetByCategory(int userId, string category)
+        {
+            return _context.TodoItems
+                .Where(t => t.UserId == userId && t.Category != null && 
+                    t.Category.ToLower() == category.ToLower())
+                .ToList();
+        }
 
         public TodoItem? GetById(int id)
         {

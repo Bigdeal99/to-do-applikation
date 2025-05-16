@@ -20,9 +20,24 @@ namespace SecureTodoApi.Services
             {
                 Id = t.Id,
                 Title = t.Title,
+                Description = t.Description,   
+                Category = t.Category,   
                 IsCompleted = t.IsCompleted
             }).ToList();
         }
+        public List<TodoResponse> GetTodosByCategory(int userId, string category)
+        {
+    var todos = _todoRepository.GetByCategory(userId, category);
+    return todos.Select(t => new TodoResponse
+    {
+        Id = t.Id,
+        Title = t.Title,
+        Description = t.Description,
+        Category = t.Category,
+        IsCompleted = t.IsCompleted
+    }).ToList();
+        }
+
 
         public TodoResponse CreateTodo(int userId, TodoCreateRequest request)
 {
