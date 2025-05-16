@@ -25,35 +25,41 @@ namespace SecureTodoApi.Services
         }
 
         public TodoResponse CreateTodo(int userId, TodoCreateRequest request)
-        {
-            var todo = new TodoItem
-            {
-                Title = request.Title,
-                IsCompleted = false,
-                UserId = userId
-            };
+{
+    var todo = new TodoItem
+    {
+        Title = request.Title,
+        Description = request.Description,
+        Category = request.Category,
+        IsCompleted = false,
+        UserId = userId
+    };
 
-            _todoRepository.Create(todo);
+    _todoRepository.Create(todo);
 
-            return new TodoResponse
-            {
-                Id = todo.Id,
-                Title = todo.Title,
-                IsCompleted = todo.IsCompleted
-            };
-        }
+    return new TodoResponse
+    {
+        Id = todo.Id,
+        Title = todo.Title,
+        Description = todo.Description,
+        Category = todo.Category,
+        IsCompleted = todo.IsCompleted
+    };
+}
 
         public bool UpdateTodo(int userId, int todoId, TodoUpdateRequest request)
-        {
-            var todo = _todoRepository.GetById(todoId);
-            if (todo == null || todo.UserId != userId) return false;
+{
+    var todo = _todoRepository.GetById(todoId);
+    if (todo == null || todo.UserId != userId) return false;
 
-            todo.Title = request.Title;
-            todo.IsCompleted = request.IsCompleted;
-            _todoRepository.Update(todo);
+    todo.Title = request.Title;
+    todo.Description = request.Description;
+    todo.Category = request.Category;
+    todo.IsCompleted = request.IsCompleted;
 
-            return true;
-        }
+    _todoRepository.Update(todo);
+    return true;
+}
 
         public bool DeleteTodo(int userId, int todoId)
         {
