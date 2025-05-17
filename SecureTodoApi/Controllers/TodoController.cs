@@ -19,19 +19,28 @@ namespace SecureTodoApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetTodos([FromQuery] string? category)
+        public IActionResult GetTodos([FromQuery] string? category, [FromQuery] bool? isCompleted)
+
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-             if (string.IsNullOrEmpty(userIdClaim)) return Unauthorized();
+    var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    if (string.IsNullOrEmpty(userIdClaim)) return Unauthorized();
 
-        var userId = int.Parse(userIdClaim);
+    var userId = int.Parse(userIdClaim);
 
+    if (!string.IsNullOrEmpty(category))
+    {
+        var todos = _todoService.GetTodosByCategory(userId, category);
+        return Ok(todos);
+    }
 
-        var todos = string.IsNullOrEmpty(category)
-        ? _todoService.GetTodosByUserId(userId)
-        : _todoService.GetTodosByCategory(userId, category);
+    if (isCompleted.HasValue)
+    {
+        var todos = _todoService.GetTodosByCompletionStatus(userId, isCompleted.Value);
+        return Ok(todos);
+    }
 
-         return Ok(todos);
+    var allTodos = _todoService.GetTodosByUserId(userId);
+    return Ok(allTodos);
         }
 
 

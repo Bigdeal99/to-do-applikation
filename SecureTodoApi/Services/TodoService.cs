@@ -37,10 +37,23 @@ namespace SecureTodoApi.Services
         IsCompleted = t.IsCompleted
     }).ToList();
         }
+        public List<TodoResponse> GetTodosByCompletionStatus(int userId, bool isCompleted)
+            {
+        var todos = _todoRepository.GetByCompletionStatus(userId, isCompleted);
+        return todos.Select(t => new TodoResponse
+        {
+        Id = t.Id,
+        Title = t.Title,
+        Description = t.Description,
+        Category = t.Category,
+        IsCompleted = t.IsCompleted
+             }).ToList();
+        }
+
 
 
         public TodoResponse CreateTodo(int userId, TodoCreateRequest request)
-{
+        {
     var todo = new TodoItem
     {
         Title = request.Title,

@@ -11,5 +11,7 @@ namespace SecureTodoApi.Services
         TodoResponse CreateTodo(int userId, TodoCreateRequest request);
         bool UpdateTodo(int userId, int todoId, TodoUpdateRequest request);
         bool DeleteTodo(int userId, int todoId);
+        List<TodoResponse> GetTodosByCompletionStatus(int userId, bool isCompleted);
+
     }
 }

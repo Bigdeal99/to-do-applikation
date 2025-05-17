@@ -30,6 +30,13 @@ namespace SecureTodoApi.Repositories
         {
             return _context.TodoItems.FirstOrDefault(t => t.Id == id);
         }
+        public List<TodoItem> GetByCompletionStatus(int userId, bool isCompleted)
+        {
+            return _context.TodoItems
+        .Where(t => t.UserId == userId && t.IsCompleted == isCompleted)
+        .ToList();
+        }
+
 
         public void Create(TodoItem item)
         {

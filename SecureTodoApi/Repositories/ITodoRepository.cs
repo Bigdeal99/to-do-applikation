@@ -10,6 +10,8 @@ namespace SecureTodoApi.Repositories
         void Update(TodoItem item);
         void Delete(TodoItem item);
         List<TodoItem> GetByCategory(int userId, string category);
+        List<TodoItem> GetByCompletionStatus(int userId, bool isCompleted);
+
 
     }
 }
