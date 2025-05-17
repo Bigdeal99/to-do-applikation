@@ -3,10 +3,11 @@ namespace SecureTodoApi.Models
     public class User
     {
         public int Id { get; set; }
-        public string Username { get; set; }
-        public string PasswordHash { get; set; }
+        public string Username { get; set; }= string.Empty;
+        public string PasswordHash { get; set; }= string.Empty;
 
         
-        public List<TodoItem> TodoItems { get; set; }
+        public List<TodoItem> TodoItems { get; set; }= null!;
+
     }
 }
