@@ -6,5 +6,6 @@ namespace SecureTodoApi.Models.DTOs
         public string? Description { get; set; }
         public string? Category { get; set; }
         public bool IsCompleted { get; set; }
+        public DateTime? DueDate { get; set; }
     }
 }

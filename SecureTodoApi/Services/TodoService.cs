@@ -22,7 +22,9 @@ namespace SecureTodoApi.Services
                 Title = t.Title,
                 Description = t.Description,   
                 Category = t.Category,   
-                IsCompleted = t.IsCompleted
+                IsCompleted = t.IsCompleted,
+                CreatedAt = t.CreatedAt,
+                DueDate = t.DueDate
             }).ToList();
         }
         public List<TodoResponse> GetTodosByCategory(int userId, string category)
@@ -34,7 +36,9 @@ namespace SecureTodoApi.Services
         Title = t.Title,
         Description = t.Description,
         Category = t.Category,
-        IsCompleted = t.IsCompleted
+        IsCompleted = t.IsCompleted,
+        CreatedAt = t.CreatedAt, 
+        DueDate = t.DueDate 
     }).ToList();
         }
         public List<TodoResponse> GetTodosByCompletionStatus(int userId, bool isCompleted)
@@ -46,7 +50,9 @@ namespace SecureTodoApi.Services
         Title = t.Title,
         Description = t.Description,
         Category = t.Category,
-        IsCompleted = t.IsCompleted
+        IsCompleted = t.IsCompleted,
+        CreatedAt = t.CreatedAt, 
+        DueDate = t.DueDate 
              }).ToList();
         }
 
@@ -59,7 +65,9 @@ namespace SecureTodoApi.Services
         Title = request.Title,
         Description = request.Description,
         Category = request.Category,
+        DueDate = request.DueDate,
         IsCompleted = false,
+        CreatedAt = DateTime.UtcNow,
         UserId = userId
     };
 
@@ -71,7 +79,10 @@ namespace SecureTodoApi.Services
         Title = todo.Title,
         Description = todo.Description,
         Category = todo.Category,
-        IsCompleted = todo.IsCompleted
+        IsCompleted = todo.IsCompleted,
+        DueDate = todo.DueDate,
+        CreatedAt = todo.CreatedAt,
+
     };
 }
 
@@ -84,6 +95,7 @@ namespace SecureTodoApi.Services
     todo.Description = request.Description;
     todo.Category = request.Category;
     todo.IsCompleted = request.IsCompleted;
+    todo.DueDate = request.DueDate;
 
     _todoRepository.Update(todo);
     return true;

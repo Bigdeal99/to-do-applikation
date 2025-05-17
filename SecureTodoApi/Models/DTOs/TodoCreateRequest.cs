@@ -5,5 +5,6 @@ namespace SecureTodoApi.Models.DTOs
         public string Title { get; set; }= string.Empty;
         public string? Description { get; set; }
         public string? Category { get; set; }
+        public DateTime? DueDate { get; set; }
     }
 }
