@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using SecureTodoApi.Models.DTOs;
 using SecureTodoApi.Services;
 using SecureTodoApi.Security;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace SecureTodoApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [EnableRateLimiting("AuthPolicy")]
     public class AuthController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -17,7 +19,7 @@ namespace SecureTodoApi.Controllers
             _userService = userService;
             _jwtService = jwtService;
         }
-
+        
         [HttpPost("register")]
         public IActionResult Register(RegisterRequest request)
         {
@@ -28,7 +30,7 @@ namespace SecureTodoApi.Controllers
 
             return Ok(new { message = "User registered successfully" });
         }
-
+        
         [HttpPost("login")]
         public IActionResult Login(LoginRequest request)
         {

@@ -2,7 +2,7 @@ namespace SecureTodoApi.Models.DTOs
 {
     public class LoginResponse
     {
-        public string Username { get; set; }
+        public required string Username { get; set; }
         public string Token { get; set; }
     }
 }

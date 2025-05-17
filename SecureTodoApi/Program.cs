@@ -7,6 +7,11 @@ using SecureTodoApi.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
+
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,10 +91,35 @@ builder.Services.AddCors(options =>
                   .AllowAnyMethod();
         });
 });
+builder.Services.AddRateLimiter(options =>
+{
+    options.OnRejected = async (context, token) =>
+    {
+        context.HttpContext.Response.StatusCode = 429;
+        await context.HttpContext.Response.WriteAsync("Too many requests. Please try again later.", token);
+    };
+
+options.AddPolicy("AuthPolicy", context =>
+{
+    var key = context.Connection.RemoteIpAddress?.ToString() ?? "anonymous";
+    Console.WriteLine($"Rate limit key: {key}");
+
+    return RateLimitPartition.GetFixedWindowLimiter(key, _ => new FixedWindowRateLimiterOptions
+    {
+        PermitLimit = 5,
+        Window = TimeSpan.FromMinutes(1),
+        QueueLimit = 2,
+        QueueProcessingOrder = QueueProcessingOrder.OldestFirst
+    });
+});
+
+});
+
 
 var app = builder.Build();
 
 app.UseCors("AllowReactApp");
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -99,6 +129,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 
