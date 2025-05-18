@@ -32,18 +32,44 @@ namespace SecureTodoApi.Controllers
         [HttpPost("login")]
         public IActionResult Login(LoginRequest request)
         {
-            var user = _userService.ValidateUser(request.Username, request.Password);
+           var user = _userService.ValidateUser(request.Username, request.Password);
+        if (user == null)
+            return Unauthorized(new { message = "Invalid credentials" });
 
-            if (user == null)
-                return Unauthorized(new { message = "Invalid credentials" });
+        var token = _jwtService.GenerateToken(user);
+        var refreshToken = _jwtService.GenerateRefreshToken();
 
-            var token = _jwtService.GenerateToken(user);
+        user.RefreshToken = refreshToken;
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+        _userService.UpdateUser(user);
 
-            return Ok(new LoginResponse
-            {
-                Username = user.Username,
-                Token = token
-            });
+        return Ok(new LoginResponse
+        {
+            Username = user.Username,
+            Token = token,
+            RefreshToken = refreshToken
+        });
         }
+        [HttpPost("refresh-token")]
+    public IActionResult RefreshToken([FromBody] TokenRequest request)
+    {
+        var user = _userService.GetByRefreshToken(request.RefreshToken);
+        if (user == null || user.RefreshTokenExpiryTime < DateTime.UtcNow)
+            return Unauthorized(new { message = "Invalid or expired refresh token" });
+
+        var newToken = _jwtService.GenerateToken(user);
+        var newRefreshToken = _jwtService.GenerateRefreshToken();
+
+        user.RefreshToken = newRefreshToken;
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+        _userService.UpdateUser(user);
+
+        return Ok(new LoginResponse
+        {
+            Username = user.Username,
+            Token = newToken,
+            RefreshToken = newRefreshToken
+        });
+    }
     }
 }

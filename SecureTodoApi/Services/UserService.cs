@@ -37,5 +37,15 @@ namespace SecureTodoApi.Services
 
             return _hasher.Verify(password, user.PasswordHash) ? user : null;
         }
+        public User? GetByRefreshToken(string token)
+        {
+            return _userRepo.GetAll().FirstOrDefault(u => u.RefreshToken == token);
+        }
+        public void UpdateUser(User user)
+        {
+            _userRepo.Update(user);
+        }
+
+
     }
 }

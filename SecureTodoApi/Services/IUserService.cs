@@ -6,5 +6,7 @@ namespace SecureTodoApi.Services
     {
         User Register(string username, string password);
         User ValidateUser(string username, string password);
+        User? GetByRefreshToken(string token);
+        void UpdateUser(User user);
     }
 }

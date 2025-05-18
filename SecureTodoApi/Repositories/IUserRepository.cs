@@ -6,5 +6,7 @@ namespace SecureTodoApi.Repositories
     {
         User? GetByUsername(string username);
         void Create(User user);
+        void Update(User user);
+        List<User> GetAll();
     }
 }

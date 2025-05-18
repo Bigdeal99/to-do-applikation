@@ -16,10 +16,19 @@ namespace SecureTodoApi.Repositories
         {
             return _context.Users.FirstOrDefault(u => u.Username == username);
         }
+        public List<User> GetAll()
+        {
+                return _context.Users.ToList();
+        }
 
         public void Create(User user)
         {
             _context.Users.Add(user);
+            _context.SaveChanges();
+        }
+            public void Update(User user)
+        {
+            _context.Users.Update(user);
             _context.SaveChanges();
         }
     }
