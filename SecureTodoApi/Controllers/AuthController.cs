@@ -29,27 +29,40 @@ namespace SecureTodoApi.Controllers
             return Ok(new { message = "User registered successfully" });
         }
 
-        [HttpPost("login")]
-        public IActionResult Login(LoginRequest request)
+       [HttpPost("login")]
+public IActionResult Login(LoginRequest request)
+{
+    var result = _userService.ValidateUser(request.Username, request.Password);
+
+    if (!result.IsSuccess)
+    {
+        if (result.IsLockedOut)
         {
-           var user = _userService.ValidateUser(request.Username, request.Password);
-        if (user == null)
-            return Unauthorized(new { message = "Invalid credentials" });
-
-        var token = _jwtService.GenerateToken(user);
-        var refreshToken = _jwtService.GenerateRefreshToken();
-
-        user.RefreshToken = refreshToken;
-        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
-        _userService.UpdateUser(user);
-
-        return Ok(new LoginResponse
-        {
-            Username = user.Username,
-            Token = token,
-            RefreshToken = refreshToken
-        });
+            var until = result.User!.LockoutEndTime!.Value.ToLocalTime().ToString("HH:mm:ss");
+            return Unauthorized(new { message = $"Account locked. Try again at {until}" });
         }
+
+        return Unauthorized(new { message = "Invalid credentials" });
+    }
+
+    var user = result.User!;
+    var token = _jwtService.GenerateToken(user);
+    var refreshToken = _jwtService.GenerateRefreshToken();
+
+    user.RefreshToken = refreshToken;
+    user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+    _userService.UpdateUser(user);
+
+    return Ok(new LoginResponse
+    {
+        Username = user.Username,
+        Token = token,
+        RefreshToken = refreshToken
+    });
+}
+
+
+        
         [HttpPost("refresh-token")]
     public IActionResult RefreshToken([FromBody] TokenRequest request)
     {
