@@ -28,6 +28,7 @@ namespace SecureTodoApi.Controllers
 
             return Ok(new { message = "User registered successfully" });
         }
+        
 
        [HttpPost("login")]
 public IActionResult Login(LoginRequest request)

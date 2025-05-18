@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using SecureTodoApi.Data;
+using SecureTodoApi.Middleware;
 using SecureTodoApi.Services;
 using SecureTodoApi.Security;
 using SecureTodoApi.Repositories;
@@ -98,6 +99,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseMiddleware<ErrorHandlingMiddleware>();
+
 
 app.UseAuthentication();
 app.UseAuthorization();
