@@ -3,6 +3,19 @@ import { AuthContext } from '../auth/AuthContext';
 import { getTodos, createTodo, updateTodo, deleteTodo } from '../api/todo';
 import { useNavigate } from 'react-router-dom';
 
+const defaultForm = {
+  id: null,
+  title: '',
+  description: '',
+  category: '',
+  dueDate: '',
+};
+
+const formatDate = (dateString) => {
+  if (!dateString) return '';
+  return dateString.split('T')[0];
+};
+
 const TodoPage = () => {
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -13,6 +26,9 @@ const TodoPage = () => {
   const [newDueDate, setNewDueDate] = useState('');
   const [error, setError] = useState('');
   const [filter, setFilter] = useState({ category: '', isCompleted: '' });
+
+  const [showModal, setShowModal] = useState(false);
+  const [formData, setFormData] = useState(defaultForm);
 
   const loadTodos = async () => {
     try {
@@ -122,9 +138,61 @@ const TodoPage = () => {
               {todo.isCompleted ? 'Undo' : 'Complete'}
             </button>
             <button onClick={() => handleDelete(todo.id)}>Delete</button>
+            <button onClick={() => {
+              setFormData({
+                id: todo.id,
+                title: todo.title,
+                description: todo.description || '',
+                category: todo.category || '',
+                dueDate: formatDate(todo.dueDate),
+              });
+              setShowModal(true);
+            }}>Edit</button>
           </li>
         ))}
       </ul>
+
+      {showModal && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0,0,0,0.5)', display: 'flex',
+          justifyContent: 'center', alignItems: 'center'
+        }}>
+          <div style={{ background: 'white', padding: 20, width: '400px' }}>
+            <h3>Edit Todo</h3>
+            <input
+              value={formData.title}
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              placeholder="Title"
+            /><br />
+            <textarea
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              placeholder="Description"
+            /><br />
+            <input
+              value={formData.category}
+              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+              placeholder="Category"
+            /><br />
+            <input
+              type="date"
+              value={formatDate(formData.dueDate)}
+              onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
+            /><br />
+            <button onClick={() => setShowModal(false)}>Cancel</button>
+            <button onClick={async () => {
+              try {
+                await updateTodo(formData.id, formData);
+                setTodos(todos.map(t => (t.id === formData.id ? { ...t, ...formData } : t)));
+                setShowModal(false);
+              } catch {
+                setError('Failed to update todo');
+              }
+            }}>Save</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
