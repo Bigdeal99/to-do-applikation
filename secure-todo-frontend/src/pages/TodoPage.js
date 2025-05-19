@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState,useCallback } from 'react';
 import { AuthContext } from '../auth/AuthContext';
 import { getTodos, createTodo, updateTodo, deleteTodo } from '../api/todo';
 import { useNavigate } from 'react-router-dom';
@@ -31,31 +31,34 @@ const TodoPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState(defaultForm);
 
-  const loadTodos = async () => {
-    try {
-      const data = await getTodos(filter);
-      setTodos(data);
-    } catch (err) {
-      if (err.response?.status === 401) {
-        logout();
-        navigate('/login');
-      } else {
-        setError('Failed to load todos');
-      }
+ const loadTodos = useCallback(async () => {
+  try {
+    const data = await getTodos(filter);
+    setTodos(data);
+  } catch (err) {
+    if (err.response?.status === 401) {
+      logout();
+      navigate('/login');
+    } else {
+      setError('Failed to load todos');
     }
-  };
+  }
+}, [filter, logout, navigate]); 
+
 
   useEffect(() => {
-    loadTodos();
-  }, [filter]);
+  loadTodos();
+}, [loadTodos]);
+
 
   const handleAddTodo = async () => {
     try {
       const todo = {
-        title: newTitle,
-        category: newCategory || null,
-        dueDate: newDueDate || null,
-      };
+  title: newTitle,
+  category: newCategory || null,
+  dueDate: newDueDate ? new Date(newDueDate).toISOString() : null,
+    };
+
       const added = await createTodo(todo);
       setTodos([...todos, added]);
       setNewTitle('');
