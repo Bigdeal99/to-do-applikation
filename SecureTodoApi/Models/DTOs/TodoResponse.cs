@@ -11,11 +11,12 @@ namespace SecureTodoApi.Models.DTOs
 
         [MaxLength(300)]
         public string? Description { get; set; }
-        
+
         [MaxLength(50)]
         public string? Category { get; set; }
         public bool IsCompleted { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? DueDate { get; set; }
+        public int UserId { get; set; }
     }
 }

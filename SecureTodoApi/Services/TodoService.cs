@@ -82,6 +82,7 @@ namespace SecureTodoApi.Services
         IsCompleted = todo.IsCompleted,
         DueDate = todo.DueDate,
         CreatedAt = todo.CreatedAt,
+        UserId = todo.UserId,
 
     };
 }
