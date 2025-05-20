@@ -1,24 +1,29 @@
 ﻿{
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "profiles": {
-  "SecureTodoApi": {
+    "SecureTodoApi": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:7247;http://localhost:5247",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DB_CONNECTION_STRING": "User Id=postgres.wbwedmsznyfpxfyjckob;Password=TVA35shx@@;Server=aws-0-eu-north-1.pooler.supabase.com;Port=5432;Database=postgres",
+        "JWT_SECRET_KEY": "pNvjf2FXyjVnpyxUz0Y4xDuyn2pHh4rM",
+        "JWT_ISSUER": "SecureTodoApi",
+        "JWT_AUDIENCE": "SecureTodoApiUsers"
+      }
+    }
+  },
+  "https": {
     "commandName": "Project",
     "dotnetRunMessages": true,
-    "launchBrowser": true,
-    "applicationUrl": "https://localhost:7247;http://localhost:5247",
+    "launchBrowser": false,
+    "applicationUrl": "https://localhost:7065;http://localhost:5247",
     "environmentVariables": {
       "ASPNETCORE_ENVIRONMENT": "Development"
     }
   }
-},
-    "https": {
-      "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": false,
-      "applicationUrl": "https://localhost:7065;http://localhost:5247",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    }
-  }
+}
 
