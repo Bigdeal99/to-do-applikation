@@ -7,7 +7,7 @@ namespace SecureTodoApi.Services
 
     public interface IUserService
     {
-        User Register(string username, string password);
+        (User? User, string[]? Errors) Register(string username, string password);
         AuthResult ValidateUser(string username, string password);
 
         User? GetByRefreshToken(string token);

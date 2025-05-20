@@ -21,10 +21,13 @@ namespace SecureTodoApi.Controllers
         [HttpPost("register")]
         public IActionResult Register(RegisterRequest request)
         {
-            var user = _userService.Register(request.Username, request.Password);
+            if (request.Password != request.ConfirmPassword)
+                return BadRequest(new { message = "Passwords do not match" });
+
+            var (user, errors) = _userService.Register(request.Username, request.Password);
 
             if (user == null)
-                return BadRequest(new { message = "Username already exists" });
+                return BadRequest(new { message = "Registration failed", errors });
 
             return Ok(new { message = "User registered successfully" });
         }

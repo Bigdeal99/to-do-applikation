@@ -9,34 +9,42 @@ namespace SecureTodoApi.Services
     {
         private readonly IUserRepository _userRepo;
         private readonly PasswordHasher _hasher;
+        private readonly PasswordPolicy _passwordPolicy;
 
         public UserService(IUserRepository userRepo, PasswordHasher hasher)
         {
             _userRepo = userRepo;
             _hasher = hasher;
+            _passwordPolicy = new PasswordPolicy();
         }
 
-        public User Register(string username, string password)
+        public (User? User, string[]? Errors) Register(string username, string password)
         {
             if (_userRepo.GetByUsername(username) != null)
-                return null;
+                return (null, new[] { "Username already exists" });
+
+            var (isValid, errors) = _passwordPolicy.ValidatePassword(password);
+            if (!isValid)
+                return (null, errors);
 
             var user = new User
             {
                 Username = username,
-                PasswordHash = _hasher.Hash(password)
+                PasswordHash = _hasher.Hash(password),
+                CreatedAt = DateTime.UtcNow,
+                LastPasswordChange = DateTime.UtcNow
             };
 
             _userRepo.Create(user);
-            return user;
+            return (user, null);
         }
+
         public User? GetByUsername(string username)
-{
-    return _userRepo.GetByUsername(username);
-}
+        {
+            return _userRepo.GetByUsername(username);
+        }
 
         public AuthResult ValidateUser(string username, string password)
-
         {
             var user = _userRepo.GetByUsername(username);
             if (user == null)
@@ -71,11 +79,10 @@ namespace SecureTodoApi.Services
         {
             return _userRepo.GetAll().FirstOrDefault(u => u.RefreshToken == token);
         }
+
         public void UpdateUser(User user)
         {
             _userRepo.Update(user);
         }
-
-
     }
 }

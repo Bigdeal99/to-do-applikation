@@ -11,6 +11,24 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Configuration.AddEnvironmentVariables();
+
+
+var requiredEnvVars = new[] { "DB_CONNECTION_STRING", "JWT_SECRET_KEY", "JWT_ISSUER", "JWT_AUDIENCE" };
+var missingEnvVars = requiredEnvVars.Where(envVar => string.IsNullOrEmpty(Environment.GetEnvironmentVariable(envVar))).ToList();
+
+if (missingEnvVars.Any())
+{
+    throw new InvalidOperationException($"Missing required environment variables: {string.Join(", ", missingEnvVars)}");
+}
+
+
+builder.Configuration["ConnectionStrings:DefaultConnection"] = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+builder.Configuration["Jwt:Key"] = Environment.GetEnvironmentVariable("JWT_SECRET_KEY");
+builder.Configuration["Jwt:Issuer"] = Environment.GetEnvironmentVariable("JWT_ISSUER");
+builder.Configuration["Jwt:Audience"] = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
