@@ -6,7 +6,7 @@ body {
 }
 
 .container {
-  max-width: 600px;
+  max-width: 800px;
   margin: auto;
   background: white;
   padding: 2rem;
@@ -22,6 +22,11 @@ input, textarea, select {
   margin-bottom: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
 }
 
 button {
@@ -43,20 +48,68 @@ button:hover {
   color: gray;
 }
 
+.todo-description {
+  color: #666;
+  margin: 4px 0;
+  font-size: 0.9em;
+}
+
+.todo-meta {
+  font-size: 0.8em;
+  color: #888;
+  margin: 4px 0;
+}
+
+.todo-meta span {
+  margin-right: 12px;
+}
+
 .todo-actions {
   margin-top: 8px;
+  display: flex;
+  gap: 8px;
 }
 
 .modal {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: rgba(0, 0, 0, 0.5);
-  display: flex; justify-content: center; align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal-content {
   background: white;
   padding: 1.5rem;
   border-radius: 8px;
-  width: 400px;
+  width: 500px;
+  max-width: 90%;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+li:last-child {
+  border-bottom: none;
 }
