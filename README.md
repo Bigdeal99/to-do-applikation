@@ -122,10 +122,10 @@ dotnet test
 ## 🖼️ Screenshots & Diagrams
 
 - ![Token Flow Diagram](docs/token-flow.png)
-- ![Frontend UI](docs/frontend-ui.png)
-- ![Frontend UI](docs/frontend1-ui.png)
-- ![Frontend UI](docs/frontend2-ui.png)
-- ![Frontend UI](docs/frontend3-ui.png)
+- ![Frontend UI](docs/frontend.png)
+- ![Frontend UI](docs/frontend1.png)
+- ![Frontend UI](docs/frontend2.png)
+- ![Frontend UI](docs/frontend3.png)
 
 ---
 
