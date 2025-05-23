@@ -12,5 +12,7 @@ namespace SecureTodoApi.Models
         public DateTime? LockoutEndTime { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime LastPasswordChange { get; set; }
+        
+        public string Role { get; set; } = "User";
     }
 }
