@@ -68,7 +68,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITodoService, TodoService>();
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<PasswordHasher>();
-
+builder.Services.AddScoped<IAuditLogService, AuditLogService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITodoRepository, TodoRepository>();
 
@@ -123,7 +123,7 @@ app.UseMiddleware<SecurityHeadersMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseMiddleware<AuditLoggingMiddleware>();
 app.MapControllers();
 
 app.Run();
